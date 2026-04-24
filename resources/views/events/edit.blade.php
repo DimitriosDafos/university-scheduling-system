@@ -70,19 +70,22 @@
                 <textarea name="description" class="mt-1 block w-full border rounded p-2" rows="4">{{ old('description', $event->description) }}</textarea>
             </div>
 
-            <div class="mt-4 flex justify-between">
-                <form action="{{ route('events.destroy', $event) }}" method="POST"
-                    onsubmit="return confirm('Event wirklich löschen?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded">Löschen</button>
-                </form>
-
-                <div>
-                    <a href="{{ route('events.index') }}" class="mr-2 px-4 py-2 border rounded">Abbrechen</a>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Speichern</button>
-                </div>
+            <div class="mt-4 flex justify-end">
+                <a href="{{ route('events.index') }}" class="mr-2 px-4 py-2 border rounded hover:bg-gray-100 transition">Abbrechen</a>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Speichern</button>
             </div>
         </form>
+
+        <div class="mt-8 pt-6 border-t border-red-100">
+            <h3 class="text-sm font-semibold text-red-600 uppercase tracking-wider mb-3">Gefahrenzone</h3>
+            <form action="{{ route('events.destroy', $event) }}" method="POST"
+                onsubmit="return confirm('Event wirklich unwiderruflich löschen?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="px-4 py-2 bg-white border border-red-600 text-red-600 rounded hover:bg-red-50 transition">
+                    Event löschen
+                </button>
+            </form>
+        </div>
     </div>
 @endsection
