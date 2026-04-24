@@ -33,8 +33,12 @@ Route::get('language/{locale}', function ($locale) {
     return redirect()->back();
 })->name('language.switch');
 
-// Admin Routes
+use App\Http\Controllers\Admin\DashboardController;
+
+// ... other routes ...
+
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard'); // Admin dashboard
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
     Route::resource('rooms', \App\Http\Controllers\Admin\RoomController::class);
     Route::resource('lecturers', \App\Http\Controllers\Admin\LecturerController::class);
