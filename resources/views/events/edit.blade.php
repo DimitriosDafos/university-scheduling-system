@@ -2,90 +2,99 @@
 
 @section('content')
     <div class="mb-4">
-        <a href="{{ route('dashboard') }}" class="text-blue-600 hover:underline">← Zurück zum Dashboard</a>
+        <a href="{{ route('events.index') }}" class="text-blue-600 hover:underline">← {{ __('Back to Dashboard') }}</a>
     </div>
     
     <div class="bg-white rounded shadow p-6 max-w-3xl mx-auto">
-        <h1 class="text-2xl font-semibold mb-4">Event bearbeiten</h1>
+        <h1 class="text-2xl font-bold mb-6">{{ $event->id ? __('Edit Event') : __('Add Event') }}</h1>
 
-        <form action="{{ route('events.update', $event) }}" method="POST">
+        <form action="{{ $event->id ? route('events.update', $event) : route('events.store') }}" method="POST">
             @csrf
-            @method('PUT')
+            @if($event->id)
+                @method('PUT')
+            @endif
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium">Titel</label>
-                    <input name="title" value="{{ old('title', $event->title) }}"
-                        class="mt-1 block w-full border rounded p-2" required>
+                    <label class="block text-sm font-medium">{{ __('Title') }}</label>
+                    <input type="text" name="title" value="{{ old('title', $event->title) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                    @error('title')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium">Kategorie</label>
-                    <select name="category" class="mt-1 block w-full border rounded p-2">
-                        <option value="lecture" @selected($event->category === 'lecture')>Vorlesung</option>
-                        <option value="exam" @selected($event->category === 'exam')>Prüfung</option>
-                        <option value="event" @selected($event->category === 'event')>Veranstaltung</option>
-                        <option value="other" @selected($event->category === 'other')>Sonstiges</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium">Raum</label>
-                    <select name="room_id" class="mt-1 block w-full border rounded p-2">
-                        <option value="">— Kein Raum —</option>
-                        @foreach ($rooms as $room)
-                            <option value="{{ $room->id }}" @selected($event->room_id == $room->id)>{{ $room->name }} —
-                                {{ $room->location }}</option>
+                    <label class="block text-sm font-medium">{{ __('Category') }}</label>
+                    <select name="category_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <option value="">— {{ __('Select Category') }} —</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" @selected(old('category_id', $event->category_id) == $category->id)>{{ $category->name }}</option>
                         @endforeach
                     </select>
+                    @error('category_id')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium">Dozent</label>
-                    <select name="user_id" class="mt-1 block w-full border rounded p-2">
-                        <option value="">— Kein Dozent —</option>
+                    <label class="block text-sm font-medium">{{ __('Room') }}</label>
+                    <select name="room_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <option value="">— {{ __('No Room') }} —</option>
+                        @foreach ($rooms as $room)
+                            <option value="{{ $room->id }}" @selected($event->room_id == $room->id)>{{ $room->name }} — {{ $room->location }}</option>
+                        @endforeach
+                    </select>
+                    @error('room_id')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium">{{ __('Lecturer') }}</label>
+                    <select name="user_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <option value="">— {{ __('No Lecturer') }} —</option>
                         @foreach ($users as $u)
                             <option value="{{ $u->id }}" @selected($event->user_id == $u->id)>{{ $u->name }}</option>
                         @endforeach
                     </select>
+                     @error('user_id')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium">Start</label>
+                    <label class="block text-sm font-medium">{{ __('Start') }}</label>
                     <input type="datetime-local" name="start_datetime"
-                        value="{{ old('start_datetime', $event->start_datetime->format('Y-m-d\TH:i')) }}"
-                        class="mt-1 block w-full border rounded p-2" required>
+                        value="{{ old('start_datetime', $event->start_datetime?->format('Y-m-d\TH:i')) }}"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                    @error('start_datetime')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium">Ende</label>
+                    <label class="block text-sm font-medium">{{ __('End') }}</label>
                     <input type="datetime-local" name="end_datetime"
-                        value="{{ old('end_datetime', $event->end_datetime->format('Y-m-d\TH:i')) }}"
-                        class="mt-1 block w-full border rounded p-2" required>
+                        value="{{ old('end_datetime', $event->end_datetime?->format('Y-m-d\TH:i')) }}"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                    @error('end_datetime')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
 
             <div class="mt-4">
-                <label class="block text-sm font-medium">Beschreibung</label>
-                <textarea name="description" class="mt-1 block w-full border rounded p-2" rows="4">{{ old('description', $event->description) }}</textarea>
+                <label class="block text-sm font-medium">{{ __('Description') }}</label>
+                <textarea name="description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="4">{{ old('description', $event->description) }}</textarea>
+                @error('description')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="mt-4 flex justify-end">
-                <a href="{{ route('events.index') }}" class="mr-2 px-4 py-2 border rounded hover:bg-gray-100 transition">Abbrechen</a>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Speichern</button>
+                <a href="{{ route('events.index') }}" class="mr-2 px-4 py-2 border rounded hover:bg-gray-100 transition">{{ __('Cancel') }}</a>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">{{ __('Save') }}</button>
             </div>
         </form>
-
-        <div class="mt-8 pt-6 border-t border-red-100">
-            <h3 class="text-sm font-semibold text-red-600 uppercase tracking-wider mb-3">Gefahrenzone</h3>
-            <form action="{{ route('events.destroy', $event) }}" method="POST"
-                onsubmit="return confirm('Event wirklich unwiderruflich löschen?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="px-4 py-2 bg-white border border-red-600 text-red-600 rounded hover:bg-red-50 transition">
-                    Event löschen
-                </button>
-            </form>
-        </div>
     </div>
 @endsection

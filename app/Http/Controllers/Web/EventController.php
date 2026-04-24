@@ -30,7 +30,7 @@ class EventController extends Controller
     {
         $event = Event::create($request->validated());
 
-        return redirect()->route('events.index')->with('success', 'Event erstellt.');
+        return redirect()->route('events.index')->with('success', __('Event created.'));
     }
 
     public function edit(Event $event)
@@ -45,14 +45,14 @@ class EventController extends Controller
     {
         $event->update($request->validated());
 
-        return redirect()->route('events.index')->with('success', 'Event aktualisiert.');
+        return redirect()->route('events.index')->with('success', __('Event updated.'));
     }
 
     public function destroy(Event $event)
     {
         $event->delete();
 
-        return redirect()->route('events.index')->with('success', 'Event gelöscht.');
+        return redirect()->route('events.index')->with('success', __('Event deleted.'));
     }
 
     public function monitor()

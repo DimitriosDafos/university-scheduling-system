@@ -15,9 +15,9 @@ class Event extends Model
         'description',
         'room_id',
         'user_id',
+        'category_id',
         'start_datetime',
         'end_datetime',
-        'category',
         'all_day',
         'color',
         'recurrence_rule',
@@ -38,6 +38,11 @@ class Event extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function recurrences()

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="mb-4">
-        <a href="{{ route('dashboard') }}" class="text-blue-600 hover:underline">← Zurück zum Dashboard</a>
+        <a href="{{ route('dashboard') }}" class="text-blue-600 hover:underline">← {{ __('Back to Dashboard') }}</a>
     </div>
     
     <div class="grid grid-cols-12 gap-6">
@@ -13,9 +13,8 @@
         <div class="col-span-4">
             <div class="bg-white rounded shadow p-4">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-semibold">Kommende Termine</h2>
-                    <a href="{{ route('events.create') }}" class="text-sm bg-blue-600 text-white px-3 py-1 rounded">Neues
-                        Event</a>
+                    <h2 class="text-lg font-semibold">{{ __('Upcoming Events') }}</h2>
+                    <a href="{{ route('events.create') }}" class="text-sm bg-blue-600 text-white px-3 py-1 rounded">{{ __('New Event') }}</a>
                 </div>
 
                 <ul>
@@ -24,12 +23,12 @@
                             <div class="flex justify-between">
                                 <div>
                                     <div class="font-medium">{{ $event->title }}</div>
-                                    <div class="text-sm text-gray-600">{{ $event->room?->name ?? 'Kein Raum' }} •
+                                    <div class="text-sm text-gray-600">{{ $event->room?->name ?? __('No Room') }} •
                                         {{ $event->start_datetime->format('d.m.Y H:i') }}</div>
                                 </div>
                                 <div class="text-right">
                                     <a href="{{ route('events.edit', $event) }}"
-                                        class="text-sm text-blue-600">Bearbeiten</a>
+                                        class="text-sm text-blue-600">{{ __('Edit') }}</a>
                                 </div>
                             </div>
                         </li>
@@ -45,6 +44,7 @@
 
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'timeGridWeek',
+                locale: '{{ app()->getLocale() }}',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
@@ -54,11 +54,9 @@
                 editable: true,
                 navLinks: true,
                 eventClick: function(info) {
-                    // öffne Edit Seite
                     window.location.href = '/events/' + info.event.id + '/edit';
                 },
                 select: function(selectionInfo) {
-                    // öffne Create mit vorausgefüllten Zeiten
                     const start = encodeURIComponent(selectionInfo.startStr);
                     const end = encodeURIComponent(selectionInfo.endStr);
                     window.location.href = '/events/create?start=' + start + '&end=' + end;
@@ -67,7 +65,7 @@
                     url: '/api/events',
                     method: 'GET',
                     failure: function() {
-                        alert('Konnte Termine nicht laden.');
+                        alert('Could not load events.');
                     }
                 },
                 eventTimeFormat: {

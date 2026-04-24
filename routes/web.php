@@ -26,4 +26,18 @@ Route::get('/auth/microsoft/redirect', [MicrosoftController::class, 'redirect'])
 
 Route::get('/auth/microsoft/callback', [MicrosoftController::class, 'callback']);
 
+Route::get('language/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'de'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('language.switch');
+
+// Admin Routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+    Route::resource('rooms', \App\Http\Controllers\Admin\RoomController::class);
+    Route::resource('lecturers', \App\Http\Controllers\Admin\LecturerController::class);
+});
+
 require __DIR__.'/auth.php';
