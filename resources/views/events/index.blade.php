@@ -1,81 +1,51 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="mb-4">
-        <a href="{{ route('dashboard') }}" class="text-blue-600 hover:underline">← {{ __('Back to Dashboard') }}</a>
-    </div>
-    
-    <div class="grid grid-cols-12 gap-6">
-        <div class="col-span-8">
-            <div id="calendar" class="bg-white rounded shadow p-4"></div>
-        </div>
-
-        <div class="col-span-4">
-            <div class="bg-white rounded shadow p-4">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-semibold">{{ __('Upcoming Events') }}</h2>
-                    <a href="{{ route('events.create') }}" class="text-sm bg-blue-600 text-white px-3 py-1 rounded">{{ __('New Event') }}</a>
-                </div>
-
-                <ul>
-                    @foreach ($events->take(10) as $event)
-                        <li class="mb-3 border-b pb-2">
-                            <div class="flex justify-between">
-                                <div>
-                                    <div class="font-medium">{{ $event->title }}</div>
-                                    <div class="text-sm text-gray-600">{{ $event->room?->name ?? __('No Room') }} •
-                                        {{ $event->start_datetime->format('d.m.Y H:i') }}</div>
-                                </div>
-                                <div class="text-right">
-                                    <a href="{{ route('events.edit', $event) }}"
-                                        class="text-sm text-blue-600">{{ __('Edit') }}</a>
-                                </div>
-                            </div>
-                        </li>
-                    @endforeach
-                </ul>
+    <div class="bg-white rounded shadow overflow-hidden">
+        <div class="p-4 border-b border-gray-200 flex justify-between items-center flex-wrap gap-4">
+            <h2 class="text-xl font-semibold text-gray-800">{{ __('Upcoming Events') }}</h2>
+            <div class="flex items-center gap-4">
+                <span class="text-sm text-gray-500">Sort by:</span>
+                <a href="{{ route('events.index', ['sort' => 'date']) }}" class="px-3 py-1 text-sm rounded {{ $sortBy === 'date' ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200' }}">Date</a>
+                <a href="{{ route('events.index', ['sort' => 'room']) }}" class="px-3 py-1 text-sm rounded {{ $sortBy === 'room' ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200' }}">Room</a>
+                <a href="{{ route('events.index', ['sort' => 'lecturer']) }}" class="px-3 py-1 text-sm rounded {{ $sortBy === 'lecturer' ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200' }}">Lecturer</a>
             </div>
+            <a href="{{ route('events.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm ml-auto">
+                {{ __('Add Event') }}
+            </a>
+        </div>
+        
+        <div class="p-4">
+            @if($events->isEmpty())
+                <p class="text-gray-500 text-center py-8">No upcoming events.</p>
+            @else
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-left text-gray-500 border-b">
+                            <th class="pb-2">Title</th>
+                            <th class="pb-2">Room</th>
+                            <th class="pb-2">Lecturer</th>
+                            <th class="pb-2">Date</th>
+                            <th class="pb-2">Time</th>
+                            <th class="pb-2 w-24">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($events as $event)
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="py-3 font-medium">{{ $event->title }}</td>
+                                <td class="py-3">{{ $event->room?->name ?? '-' }}</td>
+                                <td class="py-3">{{ $event->user?->name ?? '-' }}</td>
+                                <td class="py-3">{{ $event->start_datetime->format('d.m.Y') }}</td>
+                                <td class="py-3">{{ $event->start_datetime->format('H:i') }} - {{ $event->end_datetime->format('H:i') }}</td>
+                                <td class="py-3">
+                                    <a href="{{ route('events.edit', $event) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const calendarEl = document.getElementById('calendar');
-
-            const calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'timeGridWeek',
-                locale: '{{ app()->getLocale() }}',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                selectable: true,
-                editable: true,
-                navLinks: true,
-                eventClick: function(info) {
-                    window.location.href = '/events/' + info.event.id + '/edit';
-                },
-                select: function(selectionInfo) {
-                    const start = encodeURIComponent(selectionInfo.startStr);
-                    const end = encodeURIComponent(selectionInfo.endStr);
-                    window.location.href = '/events/create?start=' + start + '&end=' + end;
-                },
-                events: {
-                    url: '/api/events',
-                    method: 'GET',
-                    failure: function() {
-                        alert('Could not load events.');
-                    }
-                },
-                eventTimeFormat: {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
-                }
-            });
-
-            calendar.render();
-        });
-    </script>
 @endsection

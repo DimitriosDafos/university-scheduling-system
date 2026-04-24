@@ -19,16 +19,16 @@
                 {{ __('Manage room schedules and events efficiently') }}
             </p>
 
-            @guest
-                <div class="flex gap-4 justify-center">
+@guest
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
                     <a href="{{ route('login') }}"
-                        class="px-8 py-3 border border-white/30 rounded-lg hover:bg-white/10 transition">
-                        {{ __('Login') }}
+                        class="px-10 py-4 bg-white text-slate-900 rounded-lg hover:bg-gray-100 transition font-bold text-center">
+                        Login
                     </a>
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}"
-                            class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg transition">
-                            {{ __('Register') }}
+                            class="px-10 py-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-bold text-center">
+                            Register
                         </a>
                     @endif
                 </div>

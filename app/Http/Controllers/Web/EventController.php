@@ -14,9 +14,25 @@ class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::with(['room', 'user'])->orderBy('start_datetime')->paginate(25);
+        $sortBy = request('sort', 'date');
 
-        return view('events.index', compact('events'));
+        $query = Event::with(['room', 'user'])
+            ->where('start_datetime', '>=', now()->startOfDay());
+
+        switch ($sortBy) {
+            case 'room':
+                $query->orderBy('room_id')->orderBy('start_datetime');
+                break;
+            case 'lecturer':
+                $query->orderBy('user_id')->orderBy('start_datetime');
+                break;
+            default:
+                $query->orderBy('start_datetime');
+        }
+
+        $events = $query->get();
+
+        return view('events.index', compact('events', 'sortBy'));
     }
 
     public function create()
@@ -39,8 +55,9 @@ class EventController extends Controller
     {
         $rooms = Room::where('active', true)->get();
         $users = User::all();
+        $categories = Category::all();
 
-        return view('events.edit', compact('event', 'rooms', 'users'));
+        return view('events.edit', compact('event', 'rooms', 'users', 'categories'));
     }
 
     public function update(UpdateEventRequest $request, Event $event)

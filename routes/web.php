@@ -1,11 +1,15 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\EventController as WebEventController;
 use App\Http\Controllers\Auth\MicrosoftController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Web\EventController as WebEventController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+
     return view('welcome');
 });
 
@@ -30,18 +34,22 @@ Route::get('language/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'de'])) {
         session(['locale' => $locale]);
     }
+
     return redirect()->back();
 })->name('language.switch');
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\LecturerController;
+use App\Http\Controllers\Admin\RoomController;
 
 // ... other routes ...
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard'); // Admin dashboard
-    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
-    Route::resource('rooms', \App\Http\Controllers\Admin\RoomController::class);
-    Route::resource('lecturers', \App\Http\Controllers\Admin\LecturerController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('rooms', RoomController::class);
+    Route::resource('lecturers', LecturerController::class);
 });
 
 require __DIR__.'/auth.php';
