@@ -24,7 +24,7 @@
                 </a>
                 
                 @can('view_admin_panel')
-                    <a href="{{ route('admin.categories.index') }}" class="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                    <a href="{{ route('admin.dashboard') }}" class="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
                         <h3 class="font-semibold text-lg text-gray-800">{{ __('Admin Panel') }}</h3>
                         <p class="text-gray-600">{{ __('Manage system settings') }}</p>
                     </a>

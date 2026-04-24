@@ -20,7 +20,7 @@
                         <a href="{{ route('monitor') }}" class="text-sm font-medium {{ request()->routeIs('monitor') ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700' }}">{{ __('Monitor') }}</a>
                         
                         @can('view_admin_panel')
-                            <a href="{{ route('admin.categories.index') }}" class="text-sm font-medium {{ request()->routeIs('admin.*') ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700' }}">{{ __('Admin') }}</a>
+                            <a href="{{ route('admin.dashboard') }}" class="text-sm font-medium {{ request()->routeIs('admin.*') ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700' }}">{{ __('Admin') }}</a>
                         @endcan
                     </div>
                 </div>
