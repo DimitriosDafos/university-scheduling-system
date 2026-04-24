@@ -22,3 +22,15 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# AI Agent guidelines and skills
+GEMINI.md
+CLAUDE.md
+AGENTS.md
+.gemini/
+.claude/
+.agents/
+.junie/
+.mcp.json
+boost.json
+opencode.json
