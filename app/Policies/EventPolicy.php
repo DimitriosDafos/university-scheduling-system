@@ -7,6 +7,14 @@ use App\Models\User;
 
 class EventPolicy
 {
+    /**
+     * Determine if the given user can view the admin panel.
+     */
+    public function view_admin_panel(User $user): bool
+    {
+        return $user->isAdmin(); // Assuming isAdmin() method checks the 'role' attribute
+    }
+
     public function viewAny(User $user): bool
     {
         return in_array($user->role, ['admin','staff']);
