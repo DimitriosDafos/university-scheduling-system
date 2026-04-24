@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Event;
+use App\Models\User;
+use App\Policies\EventPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
-use App\Models\Event;
-use App\Policies\EventPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -17,7 +18,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        // optional: zusätzliche Gates
-        // Gate::define('manage-events', fn($user) => $user->role === 'admin');
+        Gate::define('view_admin_panel', function (User $user) {
+            return $user->isAdmin();
+        });
     }
 }
