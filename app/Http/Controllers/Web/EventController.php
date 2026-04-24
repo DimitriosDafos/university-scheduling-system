@@ -22,8 +22,9 @@ class EventController extends Controller
     {
         $rooms = Room::where('active', true)->get();
         $users = User::all();
+        $categories = Category::all(); // Fetch categories for the dropdown
 
-        return view('events.create', compact('rooms', 'users'));
+        return view('events.create', compact('rooms', 'users', 'categories'));
     }
 
     public function store(StoreEventRequest $request)
