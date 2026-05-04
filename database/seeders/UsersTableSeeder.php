@@ -3,22 +3,38 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class UsersTableSeeder extends Seeder
 {
     public function run(): void
     {
-        // Admin account
-        User::factory()->create([
+        User::create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('secret123'),
+            'password' => Hash::make('secret123'),
             'auth_provider' => 'local',
             'role' => 'admin',
+            'email_verified_at' => now(),
         ]);
 
-        // Beispielbenutzer
-        User::factory()->count(10)->create();
+        User::create([
+            'name' => 'Staff User',
+            'email' => 'staff@example.com',
+            'password' => Hash::make('secret123'),
+            'auth_provider' => 'local',
+            'role' => 'staff',
+            'email_verified_at' => now(),
+        ]);
+
+        User::create([
+            'name' => 'Viewer User',
+            'email' => 'viewer@example.com',
+            'password' => Hash::make('secret123'),
+            'auth_provider' => 'local',
+            'role' => 'viewer',
+            'email_verified_at' => now(),
+        ]);
     }
 }

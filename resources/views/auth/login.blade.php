@@ -1,4 +1,18 @@
 <x-guest-layout>
+    <!-- App description box -->
+    <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg">
+        <h2 class="text-sm font-semibold text-blue-800 dark:text-blue-300 mb-1">University Room Scheduling System</h2>
+        <p class="text-xs text-blue-700 dark:text-blue-400 mb-3">
+            Manage and view room schedules, book events, and monitor room availability across your university.
+        </p>
+        <div class="bg-white dark:bg-gray-800 rounded p-2 text-xs text-gray-700 dark:text-gray-300 font-mono">
+            <span class="font-semibold">Demo admin login:</span><br>
+            Email: <span class="text-indigo-600 dark:text-indigo-400">admin@example.com</span><br>
+            Password: <span class="text-indigo-600 dark:text-indigo-400">secret123</span>
+        </div>
+        <p class="text-xs text-blue-500 dark:text-blue-500 mt-2">⚠ Demo data is reset every 24 hours.</p>
+    </div>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -16,10 +30,8 @@
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
-
             <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
                 autocomplete="current-password" />
-
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
@@ -45,10 +57,5 @@
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
-        <a href="{{ route('microsoft.login') }}"
-            class="w-full bg-blue-600 text-white py-2 px-4 rounded text-center block mt-4">
-            Mit Microsoft anmelden
-        </a>
-
     </form>
 </x-guest-layout>

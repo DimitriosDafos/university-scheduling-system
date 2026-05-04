@@ -14,18 +14,18 @@ class UserFactory extends Factory
 {
     public function definition(): array
     {
-        $provider = fake()->randomElement(['local', 'microsoft']);
+        $provider = $this->faker->randomElement(['local', 'microsoft']);
 
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => $provider === 'local'
                 ? Hash::make('password')
                 : Hash::make(Str::random(24)),
-            'microsoft_id' => $provider === 'microsoft' ? fake()->uuid() : null,
+            'microsoft_id' => $provider === 'microsoft' ? $this->faker->uuid() : null,
             'auth_provider' => $provider,
-            'role' => fake()->randomElement(['admin', 'staff', 'viewer']),
+            'role' => $this->faker->randomElement(['admin', 'staff', 'viewer']),
             'remember_token' => Str::random(10),
         ];
     }

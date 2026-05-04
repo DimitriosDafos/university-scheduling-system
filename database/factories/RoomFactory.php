@@ -9,11 +9,12 @@ class RoomFactory extends Factory
 {
     public function definition()
     {
+        $f = \Faker\Factory::create();
         return [
-            'name' => strtoupper($this->faker->bothify('R-??###')),
-            'location' => $this->faker->streetName(),
-            'capacity' => $this->faker->numberBetween(10, 200),
-            'features' => $this->faker->randomElements(['beamer','whiteboard','video','ac'], 2),
+            'name' => strtoupper($f->bothify('R-??###')),
+            'location' => $f->streetName(),
+            'capacity' => $f->numberBetween(10, 200),
+            'features' => $f->randomElements(['beamer','whiteboard','video','ac'], 2),
             'active' => true,
         ];
     }
