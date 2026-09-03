@@ -8,9 +8,8 @@
         <div class="bg-white dark:bg-gray-800 rounded p-2 text-xs text-gray-700 dark:text-gray-300 font-mono">
             <span class="font-semibold">Demo admin login:</span><br>
             Email: <span class="text-indigo-600 dark:text-indigo-400">admin@example.com</span><br>
-            Password: <span class="text-indigo-600 dark:text-indigo-400">secret123</span>
+            Password: <span class="text-indigo-600 dark:text-indigo-400">ScheduleAdmin2026!</span>
         </div>
-        <p class="text-xs text-blue-500 dark:text-blue-500 mt-2">⚠ Demo data is reset every 24 hours.</p>
     </div>
 
     <!-- Session Status -->
